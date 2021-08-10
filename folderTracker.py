@@ -80,7 +80,7 @@ class FolderFilesHashList:
 
                     for byte_block in iter(lambda: f.read(1048576), b""):
                         hashObj.update(byte_block)
-                        return hashObj.hexdigest()
+                    return hashObj.hexdigest()
             except Exception as e:
                 return 'Error!'
         else:
