@@ -57,8 +57,8 @@ class FolderFilesHashList:
         self.log('开始将数据整理为字典')
         Info = {'Generated_time': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), 'FolderAmount': len(self.folderPath_List), 'FileAmount': len(
             self.filePath_List), 'AmountSize': self.amountSize, 'RootPath': os.path.abspath(self.path)}
-        self.folderStatus = {'FolderStatus': {
-            'Info': Info, 'FolderList': self.folderPath_List, 'FileHashList': self.fileHash_List}, 'HistoryChanges': []}
+        self.folderStatus = {'FolderStatus': {'Info': Info, 'FolderList': self.folderPath_List, 'FileHashList': self.fileHash_List}, 'HistoryChanges': [
+            {'ChangesInfo': {'Generated_time': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), 'Summary': "initialize."}}]}
         self.log('数据整理为字典完成')
 
     def FileHash(self, filepath, HashType):
@@ -101,22 +101,24 @@ def writeYml(dict_: dict, ymlFileName='dict.yml'):
 
 
 if __name__ == '__main__':
-    checkFolderPath=input('请输入需要检查的文件夹(不输入默认为当前目录):\n')
-    if checkFolderPath=='':
-        checkFolderPath='./'
-    yamlfile_Name=input('请输入yaml文件储存地址(不输入默认为当前目录的folderStatusHistory.yml):\n')
-    if yamlfile_Name=='':
-        yamlfile_Name='folderStatusHistory.yml'
-    isLog=input('是否需要详细日志输出?(是:1 否:任意输入):\n')
-    if isLog=='1':
-        isLog=1
+    checkFolderPath = input('请输入需要检查的文件夹(不输入默认为当前目录):\n')
+    if checkFolderPath == '':
+        checkFolderPath = './'
+    yamlfile_Name = input(
+        '请输入yaml文件储存地址(不输入默认为当前目录的folderStatusHistory.yml):\n')
+    if yamlfile_Name == '':
+        yamlfile_Name = 'folderStatusHistory.yml'
+    isLog = input('是否需要详细日志输出?(是:1 否:任意输入):\n')
+    if isLog == '1':
+        isLog = 1
     else:
-        isLog=0
+        isLog = 0
 
     startTime = time.time()  # 程序开始时间
 
-    print('开始生成%s的状态'%checkFolderPath)
-    now_folderStatus = FolderFilesHashList(path=checkFolderPath,isLog=isLog).folderStatus
+    print('开始生成%s的状态' % checkFolderPath)
+    now_folderStatus = FolderFilesHashList(
+        path=checkFolderPath, isLog=isLog).folderStatus
 
     if os.path.isfile(yamlfile_Name):
         print('查询并生成 文件和文件夹的更改')
@@ -133,15 +135,15 @@ if __name__ == '__main__':
             "%Y-%m-%d %H:%M:%S", time.localtime()), 'Summary': '%d new files, %d files deleted. %d new folder, %d folder deleted' % (len(filesAdd), len(filesDeleted), len(foldersAdd), len(foldersDeleted))}
         changes = {'FoldersAdd': foldersAdd, 'FoldersDeleted': foldersDeleted,
                    'FilesAdd': filesAdd, 'FilesDeleted': filesDeleted, 'ChangesInfo': changesInfo}
-        
+
         now_folderStatus['HistoryChanges'] = old_folderStatus['HistoryChanges']
         now_folderStatus['HistoryChanges'].append(changes)
     else:
         pass
 
-    print('开始写入文件(%s)'%yamlfile_Name)
-    writeYml(now_folderStatus, yamlfile_Name)    
-    
+    print('开始写入文件(%s)' % yamlfile_Name)
+    writeYml(now_folderStatus, yamlfile_Name)
+
     endTime = time.time()  # 程序结束时间
     print('运行时间%fs\n按Enter退出' % (endTime-startTime))
     input()
