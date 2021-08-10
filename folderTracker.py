@@ -30,11 +30,11 @@ class FolderFilesHashList:
         for folder in self.folderPath_List:
             self.log('正在获取文件夹\"%s\"的文件列表' % folder)
             for item in os.listdir(folder):
-                itempath = folder+'/'+item
+                itempath = folder+item
                 if os.path.isfile(itempath):
                     self.filePath_List.append(itempath)
-                else:
-                    self.folderPath_List.append(itempath)
+                elif os.path.isdir(itempath):
+                    self.folderPath_List.append(itempath+'/')
 
     def FileHashList(self):
         self.fileHash_List = []
@@ -49,7 +49,7 @@ class FolderFilesHashList:
             FileSha256 = self.FileHash(path, 256)
             FileSize = os.path.getsize(path)
             self.amountSize += FileSize
-            self.fileHash_List.append('%s|%s|%d' %
+            self.fileHash_List.append('%s|-|%s|-|%d' %
                                       (path, FileSha256, FileSize))
         self.log('文件哈希计算完毕(大小:%d)(数量:%d)' % (self.amountSize, self.fileAmount))
 
