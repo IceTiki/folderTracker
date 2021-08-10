@@ -56,7 +56,7 @@ class FolderFilesHashList:
     def FolderStatus(self):
         self.log('开始将数据整理为字典')
         Info = {'Generated_time': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), 'FolderAmount': len(self.folderPath_List), 'FileAmount': len(
-            self.filePath_List), 'AmountSize': self.amountSize, 'RootPath': os.path.abspath('.\\')}
+            self.filePath_List), 'AmountSize': self.amountSize, 'RootPath': os.path.abspath(self.path)}
         self.folderStatus = {'FolderStatus': {
             'Info': Info, 'FolderList': self.folderPath_List, 'FileHashList': self.fileHash_List}, 'HistoryChanges': []}
         self.log('数据整理为字典完成')
