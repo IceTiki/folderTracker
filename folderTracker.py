@@ -18,8 +18,7 @@ class FolderStatus:
         self.FolderStatus()
         self.logHistory()
 
-
-
+    # 获取所有文件的路径(列表)
     def FilePathList(self):
         log(f'遍历检查文件夹({self.path})的状态')
         self.filePath_List = []
@@ -35,6 +34,7 @@ class FolderStatus:
                 elif os.path.isdir(itempath):
                     self.folderPath_List.append(itempath+'/')
 
+    # 获取所有文件的哈希值
     def FileHashList(self):
         self.fileHash_List = []
         self.amountSize = 0
@@ -52,6 +52,7 @@ class FolderStatus:
                                       (path, FileSha256, FileSize))
         log('文件哈希计算完毕(大小:%d)(数量:%d)' % (self.amountSize, self.fileAmount))
 
+    # 将文件夹当前状态整理为字典
     def FolderStatus(self):
         log('将数据整理为字典')
         Info = {'Generated_time': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), 'FolderAmount': len(self.folderPath_List), 'FileAmount': len(
@@ -59,6 +60,7 @@ class FolderStatus:
         self.folderData = {'FolderStatus': {'Info': Info, 'FolderList': self.folderPath_List, 'FileHashList': self.fileHash_List}}
         log('数据整理为字典完成')
 
+    # 生成单个文件的哈希值
     def FileHash(self, filepath, HashType):
         if os.path.isfile(filepath):
             try:
@@ -84,6 +86,7 @@ class FolderStatus:
         else:
             return 'Error!I\'m a folder!'
 
+    # 记录文件夹变更
     def logHistory(self):
         if os.path.isfile(self.yamlPath):
             print('查询并生成文件和文件夹的更改')
@@ -106,20 +109,22 @@ class FolderStatus:
         else:
             self.folderData['HistoryChanges']=[{'ChangesInfo': {'Generated_time': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), 'Summary': "initialize."}}]
 
+    # yaml文件写入
     def writeDateIn(self):
         log('开始写入yaml文件')
         file = open(self.yamlPath, 'w', encoding='utf-8')
         yaml.dump(self.folderData, file, allow_unicode=True)
         file.close
         log('写入完毕')
-    
 
+    # 小函数
     def pathIntercept(self, path: str, level: int):
         new_path=''
         for i in path.split("/")[0:level]:
             new_path+=i+'/'
         return new_path
-
+    
+    # 小函数
     def printSet(self, set_:set=set(), head:str=''):
         if set_:
             for i in set_:
@@ -127,6 +132,7 @@ class FolderStatus:
         else:
             print('',end='')
 
+    # 文件夹简述
     def summary(self):
         historyChanges = self.folderData['HistoryChanges']
         if len(historyChanges) < 2:
